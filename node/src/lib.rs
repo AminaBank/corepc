@@ -418,14 +418,14 @@ impl Node {
             P2P::Yes => {
                 let p2p_port = get_available_port()?;
                 let p2p_socket = SocketAddrV4::new(LOCAL_IP, p2p_port);
-                let bind_arg = format!("-bind={}", p2p_socket);
+                let bind_arg = format!("-port={}", p2p_socket);
                 let args = vec![bind_arg];
                 Ok((args, Some(p2p_socket)))
             }
             P2P::Connect(other_node_url, listen) => {
                 let p2p_port = get_available_port()?;
                 let p2p_socket = SocketAddrV4::new(LOCAL_IP, p2p_port);
-                let bind_arg = format!("-bind={}", p2p_socket);
+                let bind_arg = format!("-port={}", p2p_socket);
                 let connect = format!("-connect={}", other_node_url);
                 let mut args = vec![bind_arg, connect];
                 if *listen {

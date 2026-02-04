@@ -15,10 +15,12 @@ exclude = ["tests", "contrib"]
 [dependencies]
 anyhow = { version = "1.0.66", default-features = false, features = ["std"] }
 corepc-client = { version = "0.11.0", path = "../client", features = ["client-sync"] }
+jsonrpc = { version = "0.19.0", path = "../jsonrpc", features = ["bitreq_http"] }
 log = { version = "0.4", default-features = false }
 serde_json = { version = "1.0.117", default-features = false }
 tempfile = { version = "3", default-features = false }
 which = { version = "3.1.1", default-features = false }
+
 
 [dev-dependencies]
 env_logger = { version = "0.9.3", default-features = false }
@@ -40,7 +42,7 @@ zip = { version = "0.6.6", default-features = false, features = ["bzip2", "defla
 # - `cargo test --all-features`: Same as using latest version.
 # - `cargo test --no-default-features` does not work, you MUST enable a version feature.
 [features]
-default = ["0_17_2"]
+default = ["29_0"]
 
 download = ["anyhow", "bitcoin_hashes", "flate2", "tar", "bitreq", "zip"]
 

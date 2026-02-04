@@ -514,9 +514,21 @@ impl Node {
         auth: &Auth,
         wallet: &str,
     ) -> anyhow::Result<Client> {
+        const RPC_WALLET_ALREADY_LOADED: i32 = -35;
         for _ in 0..10 {
             // Try to create the wallet, or if that fails it might already exist so try to load it.
-            if client_base.create_wallet(wallet).is_ok() || client_base.load_wallet(wallet).is_ok()
+//            if client_base.create_wallet(wallet).is_ok() || !client_base.load_wallet(wallet).inspect_err(|e| println!("error from load_wallet: {}", e)).is_ok()
+            if client_base.create_wallet(wallet).is_ok() ||
+                !client_base.load_wallet(wallet).is_err_and(|e|
+                    if let client::client_sync::Error::JsonRpc(jre) = e {
+                        if let jsonrpc::Error::Rpc(rpe) = jre {
+                            rpe.code != RPC_WALLET_ALREADY_LOADED
+                        } else {
+                            true
+                        }
+                    } else {
+                        true
+                    })
             {
                 let url = format!("{}/wallet/{}", rpc_url, wallet);
                 return Client::new_with_auth(&url, auth.clone())
